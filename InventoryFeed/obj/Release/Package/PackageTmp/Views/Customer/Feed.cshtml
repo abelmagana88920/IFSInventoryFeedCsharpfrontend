@@ -1,0 +1,98 @@
+﻿@model IEnumerable<InventoryFeed.Models.DB.tblInventoryFeed>
+
+@{
+    ViewBag.Title = "Feed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Feed</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.if_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customer_no)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.filetype_requested)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.send_protocol)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.protocol_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sendtime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sendbuyers_partno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sendaaid_instead_brand_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fields)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sendday)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.if_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.customer_no)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.filetype_requested)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.send_protocol)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.protocol_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sendtime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sendbuyers_partno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sendaaid_instead_brand_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fields)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sendday)
+        </td>
+        <td>
+            
+            <td><a href="javascript:void(0)" class="lnkEdit" id="@Html.DisplayFor(modelItem => item.if_id)">Edit</a></td>
+             @*  *@
+            <td><a href="javascript:void(0)" class="lnkDetails" id="@Html.DisplayFor(modelItem => item.if_id)">Details</a></td>
+            
+           
+            <td><a href="javascript:void(0)" class="lnkDelete" id="@Html.DisplayFor(modelItem => item.if_id)">Delete</a></td>
+                
+        </td>
+    </tr>
+}
+
+</table>
+
+ @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/mainscript")

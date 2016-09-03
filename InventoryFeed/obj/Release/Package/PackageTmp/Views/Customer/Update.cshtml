@@ -219,17 +219,7 @@
                             first_field = "file";
                             string id_field = "editfield-" + index_field;
                             
-                            <div class="file">
-                                <select class="newfield" id="@id_field" name="field[]">
-                                     @{ if (field == "PART_NO") { selected = "selected"; } else { selected = ""; } }
-                                    <option value="PART_NO" @selected>Part Number</option>
-                                      @{ if (field == "INVOICED_QTY") { selected = "selected"; } else { selected = ""; } }
-                                    <option value="INVOICED_QTY"  @selected>Quantity</option>
-                                   
-                                    <option value="upc">UPC Code</option>
-                                    <option value="brand">Brand Code</option>
-
-                                </select><button type="button" class="minus"><i class="fa fa-minus" aria-hidden="true"></i></button></div>
+                            <div class="file"><select class="newfield" id="@id_field" name="field[]"><option value="PART_NO">Part Number</option><option value="INVOICED_QTY">Quantity</option><option value="upc">UPC Code</option><option value="brand">Brand Code</option></select><button type="button" class="minus"><i class="fa fa-minus" aria-hidden="true"></i></button></div>
                             
                             
                         }

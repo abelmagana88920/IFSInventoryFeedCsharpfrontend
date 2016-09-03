@@ -1,5 +1,17 @@
 ﻿$(document).ready(function () {
 
+    window.adjustheight = function () {
+        var customerForm = $('#customerForm');
+        var sendvia = customerForm.find('input[name="sendvia"]:checked').val();
+        var addHeight = $("#timediv div").length + $("#filediv div").length - 2;
+       
+        if (sendvia === 'ftp') {
+            $('.testbox').css("height", 970 + addHeight * 40);
+        } else {
+            $('.testbox').css("height", 810 + addHeight * 40);
+        }
+    }
+
     var inventoryApp = {
         time: 0,
         file: 0,
@@ -7,13 +19,7 @@
         fileForm: []
     };
 
-    /*
-    var ids = $('#ulList .vehicle').map(function () {
-        return $(this).attr('id');
-    }).get();
-
-    console.log(ids);
-    */
+ 
 
     $("input").prop('required', true);
 
@@ -21,14 +27,12 @@
         var id = $(this).attr("for");
         var name = $('#' + id).attr("name");
         $('#' + id).prop("checked", true)
-      
-        
-        
-      
  
     });
 
     $("#submit").on('click', function () {
+
+        
        
         var customerNumber = $("#cnumber").val();
         var required = "";
@@ -40,7 +44,10 @@
 
         var customerForm = $('#customerForm');
 
-        
+        var controller = customerForm.find('input[name="controller"]').val();
+        var method = customerForm.find('input[name="method"]').val();
+        var if_id = customerForm.find('input[name="if_id"]').val();
+
         var type = customerForm.find('input[name="type"]:checked').val();
 
         var sendid = customerForm.find('input[name="sendid"]:checked').val();
@@ -128,15 +135,8 @@
             return false;
         }
 
-
-
-
-
-
-      
-
-       
         var yourJsonObject = {
+            customer_no: customerNumber,
             type: type,
             sendid: sendid,
             sendvia: sendvia,
@@ -148,45 +148,38 @@
             field: field
         };
         
+        console.log(yourJsonObject);
         
-        $.post('/Customer/SendRequest/' + customerNumber,
+        var url = "";
+        var feed_direct;
+        if (controller == "Customer" && method == "Create") {
+            url = '/Customer/SendRequest/' + customerNumber;
+            feed_direct = "Feed";
+        }
+        else if (controller == "Customer" && method == "Update") {
+            url = '/Customer/FeedEdit/' + if_id;
+            feed_direct = "../Feed";
+        }
+        $.post(url,
             $.param(yourJsonObject, true)
-       ,
+        ,
        function (data, status) {
 
-           console.log("Data");
-           console.log(data.message);
-           console.log("Status");
-           console.log(status);
-
            if (status == "success") {
-               window.location.href = 'Feed';
+               window.location.href = feed_direct;
 
            }
-          
-           /*if (status == "success") {
-
-               $.redirectPost(redirect, data.message);
-
-               // jquery extend function
-               $.extend(
-               {
-                   redirectPost: function (location, args) {
-                       var form = '';
-                       $.each(args, function (key, value) {
-                           value = value.split('"').join('\"')
-                           form += '<input type="hidden" name="' + key + '" value="' + value + '">';
-                       });
-                       $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
-                   }
-               });
-           } */
-
-       }); 
+       });  
 
      
 
         return false;
+    });
+
+    var removeButton = $(".minus");
+    removeButton.on('click',function () {
+        $('.testbox').css("height", $('.testbox').height() - 40);
+        $(this).parent().remove();
     });
 
     $(".add").on('click', function (e) {
@@ -223,6 +216,7 @@
         var removeButton = $("<button type=\"button\" class=\"minus\"><i class=\"fa fa-minus\" aria-hidden=\"true\"></i></button>");
 
         removeButton.click(function () {
+            
             var index = inventoryApp[toAdd + 'Form'].indexOf(toAdd + '-' + intId);
             inventoryApp[toAdd + 'Form'].splice(index, 1);
             $('.testbox').css("height", $('.testbox').height() - 40);
@@ -267,22 +261,19 @@
             $('.testbox').toggleClass('ftp');
           
             $('.ftplabel').toggleClass('labelhide');
+            $('.ftpform').toggleClass('labelhide');
+           
             $('.email').toggleClass('labelhide');
-            $('.ftpform').toggle('slow');
+            
 
-            /*if (selected === 'email') {
-               
-                    document.getElementById('email_address').style.visibility = 'visible';
-            } else if (selected === 'ftp') {
-                    document.getElementById('email_address').style.visibility = 'none';
-     
+            /*if (selected == "ftp") {
+                $('.email').toggle('slow');
+            }
+            else if (selected == "email") {
+            
+                $('.ftpform').toggle('slow');
             } */
-        
-          
-          
-        
-
-        
+ 
     });
 
 
@@ -335,6 +326,17 @@
         }
            
            // DeleteUser(id);
+        return false;
+    });
+
+    $("a.lnkEdit").on("click", function () {
+        var id = $(this).attr("id");
+ 
+        var yourJsonObject = {
+            if_id: id
+        };
+
+        window.location.href = '/Customer/Update/' + id;
         return false;
     });
 

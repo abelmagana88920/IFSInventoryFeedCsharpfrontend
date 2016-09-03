@@ -94,6 +94,7 @@
           <Property Name="sendbuyers_partno" Type="nvarchar" MaxLength="50" />
           <Property Name="sendaaid_instead_brand_id" Type="nvarchar" MaxLength="50" />
           <Property Name="fields" Type="nvarchar(max)" />
+          <Property Name="includeheaders" Type="nvarchar" MaxLength="50" />
           <Property Name="sendday" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblInventoryFeedProcess">
@@ -195,26 +196,11 @@
     <edmx:ConceptualModels>
       <Schema Namespace="IFSReportingModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="IFSReportingContext" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="tblInventoryFeeds" EntityType="IFSReportingModel.tblInventoryFeed" />
           <EntitySet Name="tblInventoryLogs" EntityType="IFSReportingModel.tblInventoryLog" />
           <EntitySet Name="tblInvoiceLinesMasters" EntityType="IFSReportingModel.tblInvoiceLinesMaster" />
           <EntitySet Name="tblInventoryFeedProcesses" EntityType="IFSReportingModel.tblInventoryFeedProcess" />
+          <EntitySet Name="tblInventoryFeeds" EntityType="IFSReportingModel.tblInventoryFeed" />
         </EntityContainer>
-        <EntityType Name="tblInventoryFeed">
-          <Key>
-            <PropertyRef Name="if_id" />
-          </Key>
-          <Property Name="if_id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="customer_no" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="filetype_requested" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="send_protocol" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="protocol_address" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="sendtime" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="sendbuyers_partno" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="sendaaid_instead_brand_id" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="fields" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="sendday" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-        </EntityType>
         <EntityType Name="tblInventoryLog">
           <Key>
             <PropertyRef Name="il_id" />
@@ -306,28 +292,28 @@
           <Property Type="DateTime" Name="datetime_updated" Precision="3" />
           <Property Type="String" Name="status" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="tblInventoryFeed">
+          <Key>
+            <PropertyRef Name="if_id" />
+          </Key>
+          <Property Type="Int32" Name="if_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="customer_no" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="filetype_requested" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="send_protocol" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="protocol_address" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="sendtime" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="sendbuyers_partno" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="sendaaid_instead_brand_id" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="fields" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="includeheaders" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="sendday" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="IFSReportingModelStoreContainer" CdmEntityContainer="IFSReportingContext">
-          <EntitySetMapping Name="tblInventoryFeeds">
-            <EntityTypeMapping TypeName="IFSReportingModel.tblInventoryFeed">
-              <MappingFragment StoreEntitySet="tblInventoryFeed">
-                <ScalarProperty Name="if_id" ColumnName="if_id" />
-                <ScalarProperty Name="customer_no" ColumnName="customer_no" />
-                <ScalarProperty Name="filetype_requested" ColumnName="filetype_requested" />
-                <ScalarProperty Name="send_protocol" ColumnName="send_protocol" />
-                <ScalarProperty Name="protocol_address" ColumnName="protocol_address" />
-                <ScalarProperty Name="sendtime" ColumnName="sendtime" />
-                <ScalarProperty Name="sendbuyers_partno" ColumnName="sendbuyers_partno" />
-                <ScalarProperty Name="sendaaid_instead_brand_id" ColumnName="sendaaid_instead_brand_id" />
-                <ScalarProperty Name="fields" ColumnName="fields" />
-                <ScalarProperty Name="sendday" ColumnName="sendday" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblInventoryLogs">
             <EntityTypeMapping TypeName="IFSReportingModel.tblInventoryLog">
               <MappingFragment StoreEntitySet="tblInventoryLog">
@@ -419,6 +405,23 @@
                 <ScalarProperty Name="time_split" ColumnName="time_split" />
                 <ScalarProperty Name="if_id" ColumnName="if_id" />
                 <ScalarProperty Name="ifp_id" ColumnName="ifp_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblInventoryFeeds">
+            <EntityTypeMapping TypeName="IFSReportingModel.tblInventoryFeed">
+              <MappingFragment StoreEntitySet="tblInventoryFeed">
+                <ScalarProperty Name="sendday" ColumnName="sendday" />
+                <ScalarProperty Name="includeheaders" ColumnName="includeheaders" />
+                <ScalarProperty Name="fields" ColumnName="fields" />
+                <ScalarProperty Name="sendaaid_instead_brand_id" ColumnName="sendaaid_instead_brand_id" />
+                <ScalarProperty Name="sendbuyers_partno" ColumnName="sendbuyers_partno" />
+                <ScalarProperty Name="sendtime" ColumnName="sendtime" />
+                <ScalarProperty Name="protocol_address" ColumnName="protocol_address" />
+                <ScalarProperty Name="send_protocol" ColumnName="send_protocol" />
+                <ScalarProperty Name="filetype_requested" ColumnName="filetype_requested" />
+                <ScalarProperty Name="customer_no" ColumnName="customer_no" />
+                <ScalarProperty Name="if_id" ColumnName="if_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -104,8 +104,8 @@ namespace InventoryFeed.Controllers
                                  send_protocol = Request["sendvia"],
                                  protocol_address = protocol_addr.Replace(",",";"),
                                  
-                                // buyer = Request["buyer"],
-                                // header = Request["header"],
+                                 sendbuyers_partno = Request["buyer"],
+                                includeheaders = Request["header"],
                                 sendtime = Request["time"].Replace(",",";"),
                                 fields = Request["field"].Replace(",",";"),
                                 sendday = "Mon,Tue,Wed,Thu,Fri"
@@ -172,8 +172,8 @@ namespace InventoryFeed.Controllers
              inv.send_protocol = Request["sendvia"];
              inv.protocol_address = protocol_addr.Replace(",", ";");
 
-                // buyer = Request["buyer"],
-                // header = Request["header"],
+              inv.sendbuyers_partno= Request["buyer"];
+              inv.includeheaders = Request["header"];
              inv.sendtime = Request["time"].Replace(",", ";");
              inv.fields = Request["field"].Replace(",", ";");
              inv.sendday = "Mon,Tue,Wed,Thu,Fri";

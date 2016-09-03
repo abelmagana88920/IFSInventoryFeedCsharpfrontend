@@ -44,6 +44,12 @@ namespace InventoryFeed
               defaults: new { controller = "Customer", action = "SendRequest", customer_no = UrlParameter.Optional }
           );
 
+           routes.MapRoute(
+           name: "FeedEdit",
+           url: "Customer/FeedEdit/{if_id}",
+           defaults: new { controller = "Customer", action = "FeedEdit", if_id = UrlParameter.Optional }
+       );
+
           
 
             routes.MapRoute(

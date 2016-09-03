@@ -23,6 +23,7 @@ namespace InventoryFeed.Models.DB
         public string sendbuyers_partno { get; set; }
         public string sendaaid_instead_brand_id { get; set; }
         public string fields { get; set; }
+        public string includeheaders { get; set; }
         public string sendday { get; set; }
     }
 }
