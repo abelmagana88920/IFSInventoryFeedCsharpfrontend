@@ -13,6 +13,10 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Newtonsoft.Json.Linq;
 
 using InventoryFeed.Models.DB;
+using System.Data;
+using System.Data.Objects;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 //using InventoryFeed.Models.ViewModel;
 
  
@@ -119,6 +123,24 @@ namespace InventoryFeed.Controllers
 
                 int id = req.if_id;  //the last id inserted
 
+                string[] separators = { ",", ";", " " };
+                string sendtime = req.sendtime;
+                string[] sendtime_array = sendtime.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+                
+                foreach (string individual_sendtime in sendtime_array)
+                {
+                    
+                    tblInventoryFeedProcess subreq = new tblInventoryFeedProcess
+                    {
+                         if_id = id,
+                         status="0",
+                         time_split = TimeSpan.Parse(individual_sendtime, System.Globalization.CultureInfo.CurrentCulture),
+                    };
+                    db.tblInventoryFeedProcesses.Add(subreq);
+                    db.SaveChanges();
+                } 
+
+
 
                 return Json(new { message = req});
             }
@@ -136,13 +158,16 @@ namespace InventoryFeed.Controllers
 
             tblInventoryFeed inv = new tblInventoryFeed() //selecting for update
             {
-                if_id = if_id,
+                if_id = if_id
             };
 
             db_local.tblInventoryFeeds.Attach(inv);  
             db_local.tblInventoryFeeds.Remove(inv);
             db_local.SaveChanges();
 
+
+            Library.Execute("DELETE tblInventoryFeedProcess WHERE if_id = " + if_id);
+   
             return Json(new { message = "deleted" });
         }
 
@@ -179,6 +204,27 @@ namespace InventoryFeed.Controllers
              inv.sendday = "Mon,Tue,Wed,Thu,Fri";
             
             db_local.SaveChanges();
+
+            Library.Execute("DELETE tblInventoryFeedProcess WHERE if_id = " + if_id);
+
+
+            string[] separators = { ",", ";", " " };
+            string sendtime = Request["time"].Replace(",", ";");
+            string[] sendtime_array = sendtime.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string individual_sendtime in sendtime_array)
+            {
+
+                tblInventoryFeedProcess subreq = new tblInventoryFeedProcess
+                {
+                    if_id = if_id,
+                    status = "0",
+                    time_split = TimeSpan.Parse(individual_sendtime, System.Globalization.CultureInfo.CurrentCulture),
+                };
+                db.tblInventoryFeedProcesses.Add(subreq);
+                db.SaveChanges();
+            } 
+
 
             return Json(new { message = "edit" });
         }

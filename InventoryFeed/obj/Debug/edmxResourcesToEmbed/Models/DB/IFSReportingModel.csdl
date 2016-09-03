@@ -92,7 +92,7 @@
       <PropertyRef Name="ifp_id" />
     </Key>
     <Property Type="Int32" Name="ifp_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Type="Int32" Name="if_id" />
+    <Property Type="Int32" Name="if_id" ConcurrencyMode="None" />
     <Property Type="Time" Name="time_split" Precision="7" />
     <Property Type="DateTime" Name="datetime_updated" Precision="3" />
     <Property Type="String" Name="status" MaxLength="50" FixedLength="false" Unicode="true" />
