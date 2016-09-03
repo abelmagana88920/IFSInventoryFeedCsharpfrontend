@@ -45,6 +45,20 @@ namespace InventoryFeed.Controllers
             return View();
         }
 
+        public ActionResult Update(int id)
+        {
+           
+                int if_id = id;
+                var edit_query = db.tblInventoryFeeds.Where(m => m.if_id == if_id).FirstOrDefault();
+
+                /*var edit_query = from m in db.tblInventoryFeeds
+                                 where m.if_id == if_id
+                                 select m; */
+                return View(edit_query);
+          
+           
+        }
+
 
         public ActionResult Process()
         {

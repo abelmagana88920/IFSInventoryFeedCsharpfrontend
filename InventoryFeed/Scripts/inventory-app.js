@@ -263,10 +263,26 @@
             $('.testbox').css("height", 810 + addHeight * 40);
         }
 
-        $('.testbox').toggleClass('ftp');
-        $('.email').toggle('slow');
-        $('.ftplabel').toggleClass('labelhide');
-        $('.ftpform').toggle('slow');
+        
+            $('.testbox').toggleClass('ftp');
+          
+            $('.ftplabel').toggleClass('labelhide');
+            $('.email').toggleClass('labelhide');
+            $('.ftpform').toggle('slow');
+
+            /*if (selected === 'email') {
+               
+                    document.getElementById('email_address').style.visibility = 'visible';
+            } else if (selected === 'ftp') {
+                    document.getElementById('email_address').style.visibility = 'none';
+     
+            } */
+        
+          
+          
+        
+
+        
     });
 
 
