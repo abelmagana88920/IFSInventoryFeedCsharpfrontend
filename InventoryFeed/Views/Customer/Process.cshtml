@@ -1,0 +1,63 @@
+﻿@model IEnumerable<InventoryFeed.Models.DB.tblInventoryFeedProcess>
+
+@{
+    ViewBag.Title = "Process";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Process</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ifp_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.if_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.time_split)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.datetime_updated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ifp_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.if_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.time_split)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.datetime_updated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
+
+ @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/mainscript")@*  *@

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InventoryFeed
+namespace InventoryFeed.Models.DB
 {
     using System;
     using System.Collections.Generic;

@@ -15,6 +15,8 @@
     console.log(ids);
     */
 
+    $("input").prop('required', true);
+
     $(".radio").on('click', function () {
         var id = $(this).attr("for");
         var name = $('#' + id).attr("name");
@@ -29,6 +31,13 @@
     $("#submit").on('click', function () {
        
         var customerNumber = $("#cnumber").val();
+        var required = "";
+        var focus = new Array();
+        var index=0;
+        var time_required = 0;
+        var fields_required = 0;
+       
+
         var customerForm = $('#customerForm');
 
         
@@ -45,17 +54,85 @@
         var header = customerForm.find('input[name="header"]:checked').val();
 
  
-
-      //  var time = customerForm.find('input[name="time[]"]').val();
         var time = $("input[name='time[]']")
               .map(function () { return $(this).val(); }).get();
+
        
+        var tempArray = new Array();
+        var a = 0;
+        time.forEach(function (entry) {
+            if (entry != "") tempArray[a] = entry + ":00";
+            else {
+                tempArray[a] = "";
+                time_required = 1;
+            }
+            a++;
+        });
+
+        time = tempArray.join();
+
 
         var field = $("select[name='field[]']")
               .map(function () { return $(this).val(); }).get();
 
-        
-        //alert(customerNumber);
+        /*a = 0;
+        field.forEach(function (entry) {
+            if (entry == "") field_required = 1;
+            a++;
+        }); */
+
+
+        if (customerNumber == "") {
+            required += "\nCustomer Number is Required";
+            focus[index] = "cnumber";
+            index++;
+        }
+
+        if ( sendvia== "email" && email=="") {
+            required += "\nEmail Address is Required";
+            focus[index] = "email_address";
+            index++;
+        }
+
+        if (sendvia == "ftp") {
+            if (ftphostname == "") {
+                required += "\nFTP hostname is Required";
+                focus[index] = "ftphostname";
+                index++;
+            }
+
+            if (ftpusername == "") {
+                required += "\nFTP username is Required";
+                focus[index] = "ftpusername";
+                index++;
+            }
+
+            if (ftppassword == "") {
+                required += "\nFTP password is Required";
+                focus[index] = "ftppassword";
+                index++;
+            }
+        }
+
+        if (time_required == 1) {
+            required += "\nTime is Required";
+            focus[index] = "time-0";
+            index++;
+        }
+
+ 
+        console.log(focus);
+        if (required != "") {
+            alert(required);
+            $("#" + focus[0]).focus();
+            return false;
+        }
+
+
+
+
+
+
       
 
        
@@ -81,16 +158,33 @@
            console.log(data.message);
            console.log("Status");
            console.log(status);
-          // console.log("Data: " + data.message + "\nStatus: " + status);
+
+           if (status == "success") {
+               window.location.href = 'Feed';
+
+           }
+          
+           /*if (status == "success") {
+
+               $.redirectPost(redirect, data.message);
+
+               // jquery extend function
+               $.extend(
+               {
+                   redirectPost: function (location, args) {
+                       var form = '';
+                       $.each(args, function (key, value) {
+                           value = value.split('"').join('\"')
+                           form += '<input type="hidden" name="' + key + '" value="' + value + '">';
+                       });
+                       $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+                   }
+               });
+           } */
+
        }); 
 
-       /* $.post('/Customer/SendRequest/' + customerNumber, function (result) {
-             if (result.length > 0) 
-                 
-            } else {
-               
-            }  
-        }); */
+     
 
         return false;
     });
@@ -115,10 +209,10 @@
 
         } else {
             var fName = $("<select class=\"newfield\" id=\"field-" + intId + "\" name=\"field[]\" /></select>");
-            var options = $(" <option value=\"our_part_number\">Our Part Number</option> \
-                              <option value=\"quantity\">Quantity</option> \
-                              <option value=\"upc\">UPC Code</option> \
-                              <option value=\"brand\">Brand Code</option>"
+            var options = $(" <option value=\"PART_NO\">Part Number</option>"+
+                       "<option value=\"INVOICED_QTY\">Quantity</option>"+
+                       "<option value=\"upc\">UPC Code</option>"+
+                        "<option value=\"brand\">Brand Code</option>"
                           );
             fName.append(options);
 
@@ -157,10 +251,13 @@
 
     $('.sendvia').on('click', function () {
 
-        var selected = $("input[type='radio'][name='gender']:checked").val();
+        var selected = $('#customerForm').find('input[name="sendvia"]:checked').val();
+
+        console.log(selected);
+
         var addHeight = $("#timediv div").length + $("#filediv div").length - 2;
 
-        if (selected === 'FTP') {
+        if (selected === 'ftp') {
             $('.testbox').css("height", 970 + addHeight * 40);
         } else {
             $('.testbox').css("height", 810 + addHeight * 40);
@@ -200,4 +297,31 @@
         }
         return false;
     });
+
+
+    $("a.lnkDelete").on("click", function () {
+        
+        var id = $(this).attr("id");
+        var answer = confirm("You are about to delete this user with ID " + id + " . Continue?");
+        var yourJsonObject = {
+            if_id: id
+        };
+
+        if (answer) {
+           $.post('/Customer/FeedDelete/' + id,
+               $.param(yourJsonObject, true)
+              ,
+              function (data, status) {
+                  if (status == "success") {
+                      window.location.href = 'Feed';
+                  } 
+              });
+        }
+           
+           // DeleteUser(id);
+        return false;
+    });
+
 });
+
+

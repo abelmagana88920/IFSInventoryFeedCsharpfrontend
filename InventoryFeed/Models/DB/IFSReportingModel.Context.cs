@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InventoryFeed
+namespace InventoryFeed.Models.DB
 {
     using System;
     using System.Data.Entity;
@@ -25,6 +25,9 @@ namespace InventoryFeed
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<tblInventoryFeed> tblInventoryFeeds { get; set; }
+        public DbSet<tblInventoryFeedProcess> tblInventoryFeedProcesses { get; set; }
+        public DbSet<tblInventoryLog> tblInventoryLogs { get; set; } 
         public DbSet<tblInvoiceLinesMaster> tblInvoiceLinesMasters { get; set; }
     }
 }

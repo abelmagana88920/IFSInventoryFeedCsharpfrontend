@@ -38,17 +38,13 @@ namespace InventoryFeed
            ); 
 
 
-            routes.MapRoute(
+           routes.MapRoute(
               name: "SendRequest",
               url: "Customer/SendRequest/{customer_no}",
               defaults: new { controller = "Customer", action = "SendRequest", customer_no = UrlParameter.Optional }
           );
 
-            routes.MapRoute(
-             name: "RevaleeTest",
-             url: "Customer/RevaleeTest/{customer_no}",
-             defaults: new { controller = "Customer", action = "RevaleeTest", customer_no = UrlParameter.Optional }
-         );
+          
 
             routes.MapRoute(
                 name: "Default",

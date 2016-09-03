@@ -10,10 +10,10 @@ namespace InventoryFeed.Controllers
     {
         //
         // GET: /Home/
-        [Authorize]
+       // [Authorize]
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Feed", "Customer");
         }
 
     }
