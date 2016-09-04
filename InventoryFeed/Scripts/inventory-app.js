@@ -155,6 +155,7 @@
         if (controller == "Customer" && method == "Create") {
             url = '/Customer/SendRequest/' + customerNumber;
             feed_direct = "Feed";
+             
         }
         else if (controller == "Customer" && method == "Update") {
             url = '/Customer/FeedEdit/' + if_id;
@@ -329,7 +330,7 @@
         return false;
     });
 
-    $("a.lnkEdit").on("click", function () {
+    /*$("a.lnkEdit").on("click", function () {
         var id = $(this).attr("id");
  
         var yourJsonObject = {
@@ -337,6 +338,37 @@
         };
 
         window.location.href = '/Customer/Update/' + id;
+        return false;
+    }); */
+
+    window.lnkDelete = function (id) {
+        var answer = confirm("You are about to delete this user with ID " + id + " . Continue?");
+        var yourJsonObject = {
+            if_id: id
+        };
+
+        if (answer) {
+            $.post('/Customer/FeedDelete/' + id,
+                $.param(yourJsonObject, true)
+               ,
+               function (data, status) {
+                   if (status == "success") {
+                       window.location.href = 'Feed';
+                   }
+               });
+        }
+    }
+
+    window.lnkEdit = function (id) {
+        window.location.href = '/Customer/Update/' + id;
+        return false;
+    }
+
+    $("a#lnkCreate").on("click", function () {
+        var dt = $('#example').DataTable();
+        dt.table().state.clear();
+
+        window.location.href = '/Customer/Create';
         return false;
     });
 

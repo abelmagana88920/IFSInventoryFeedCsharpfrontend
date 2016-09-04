@@ -282,6 +282,7 @@
     <Content Include="Views\Customer\Feed.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Customer\Update.cshtml" />
+    <Content Include="Views\Customer\Datatables.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

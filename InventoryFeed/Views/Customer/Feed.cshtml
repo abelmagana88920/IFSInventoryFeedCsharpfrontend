@@ -1,98 +1,96 @@
 ﻿@model IEnumerable<InventoryFeed.Models.DB.tblInventoryFeed>
 
-@{
-    ViewBag.Title = "Feed";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+     @Styles.Render("~/Content/datatables")
+     @Scripts.Render("~/bundles/datatables")
 
-<h2>Feed</h2>
+	<script type="text/javascript" language="javascript" class="init">
+	    $(function () {
+	        $('#example').DataTable({
+	            stateSave: true,
+	            scrollY: "300px",
+	            scrollX: true,
+	            scrollCollapse: true,
+	            paging: false,
+	            fixedColumns: {
+	                leftColumns: 1,
+                    rightColumns: 3
+	            }
+	        });
+
+	    });
+	</script>
+
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+     <a href="javascript:void(0)" id="lnkCreate" >Create New</a>
 </p>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.if_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.customer_no)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.filetype_requested)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.send_protocol)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.protocol_address)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sendtime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sendbuyers_partno)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sendaaid_instead_brand_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fields)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.sendday)
-        </th>
-        <th></th>
-    </tr>
+  
+		 <table id="example" class="stripe row-border order-column" cellspacing="0" width="100%">
+			 <thead>
+            <tr>
+                <th style="background-color:white">@Html.DisplayNameFor(model => model.if_id)</th>
+                <th>CUSTOMER NO</th>
+                <th>FILE TYPE</th>
+                <th>SEND VIA</th>
+                <th>ADDRESS</th>
+                <th>TIME</th>
+                <th>SEND BUYERS PARTNO</th>
+                <th>SEND ID</th>
+                <th>FIELDS</th>
+                <th>SEND DAY</th>
+                 <th style="background-color:white"></th>
+                 <th style="background-color:white"></th>
+                 <th style="background-color:white"></th>
+            </tr>
+        </thead>
+         <tfoot>
+             <tr align="center">
+                 <th style="background-color:white">@Html.DisplayNameFor(model => model.if_id)</th>
+                <th>CUSTOMER NO</th>
+                <th>FILE TYPE</th>
+                <th>SEND VIA</th>
+                <th>ADDRESS</th>
+                <th>TIME</th>
+                <th>SEND BUYERS PARTNO</th>
+                <th>SEND ID</th>
+                <th>FIELDS</th>
+                <th>SEND DAY</th>
+                  <th style="background-color:white"></th>
+                 <th style="background-color:white"></th>
+                 <th style="background-color:white"></th>
+            </tr>
+        </tfoot>
+       
+   
+    <tbody>
+    @foreach (var item in Model) {
+        
+        <tr align="center">
+            <td>@Html.DisplayFor(modelItem => item.if_id)</td>
+            <td>@Html.DisplayFor(modelItem => item.customer_no)</td>
+            <td>@Html.DisplayFor(modelItem => item.filetype_requested)</td>
+            <td>@Html.DisplayFor(modelItem => item.send_protocol)</td>
+            <td>@Html.DisplayFor(modelItem => item.protocol_address)</td>
+            <td>@Html.DisplayFor(modelItem => item.sendtime)</td>
+            <td>@Html.DisplayFor(modelItem => item.sendbuyers_partno)</td>
+            <td>@Html.DisplayFor(modelItem => item.sendaaid_instead_brand_id)</td>
+            <td>@Html.DisplayFor(modelItem => item.fields)</td>
+            <td>@Html.DisplayFor(modelItem => item.sendday)</td>
+          
+            <td><a onclick="lnkEdit(@Html.DisplayFor(modelItem => item.if_id))" >Edit</a></td>
+            <td><a  onclick="alert('')" class="lnkDetails" id="@Html.DisplayFor(modelItem => item.if_id)">Details</a></td>  
+            <td><a onclick="lnkDelete(@Html.DisplayFor(modelItem => item.if_id))" >Delete</a></td>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.if_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.customer_no)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.filetype_requested)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.send_protocol)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.protocol_address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sendtime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sendbuyers_partno)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sendaaid_instead_brand_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fields)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.sendday)
-        </td>
-        <td>
-            
-            <td><a href="javascript:void(0)" class="lnkEdit" id="@Html.DisplayFor(modelItem => item.if_id)">Edit</a></td>
-             @*  *@
-            <td><a href="javascript:void(0)" class="lnkDetails" id="@Html.DisplayFor(modelItem => item.if_id)">Details</a></td>
-            
-           
-            <td><a href="javascript:void(0)" class="lnkDelete" id="@Html.DisplayFor(modelItem => item.if_id)">Delete</a></td>
-                
-        </td>
-    </tr>
-}
+    
+    }
+   </tbody>
+   </table>
+       
 
-</table>
+@Scripts.Render("~/bundles/mainscript")
+			
+      
 
- @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/mainscript")
+ 
+ 

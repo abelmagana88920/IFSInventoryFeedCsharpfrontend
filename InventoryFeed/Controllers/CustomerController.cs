@@ -63,7 +63,6 @@ namespace InventoryFeed.Controllers
            
         }
 
-
         public ActionResult Process()
         {
           
@@ -73,8 +72,10 @@ namespace InventoryFeed.Controllers
              return View(process); 
         }
 
-      
-
+        public ActionResult Datatables()
+        {
+            return View();
+        }
 
         // GET: /Customer/Name/{customer_no}
         
@@ -90,6 +91,25 @@ namespace InventoryFeed.Controllers
             return Json(db.tblInvoiceLinesMasters.Select(m => new { m.CUSTOMER_NO, m.CUSTOMER_NAME }).Where(m => m.CUSTOMER_NO== customer_no).Distinct(), JsonRequestBehavior.AllowGet);
         }
 
+
+        public void AddEditSameFunction(int if_id,string sendtime) {
+            string[] separators = { ",", ";", " " };
+            string[] sendtime_array = Library.Explode(sendtime, separators);
+
+            foreach (string individual_sendtime in sendtime_array)
+            {
+                tblInventoryFeedProcess subreq = new tblInventoryFeedProcess
+                {
+                    if_id = if_id,
+                    status = "0",
+                    time_split = TimeSpan.Parse(individual_sendtime, System.Globalization.CultureInfo.CurrentCulture),
+                };
+                db.tblInventoryFeedProcesses.Add(subreq);
+                db.SaveChanges();
+            } 
+        }
+    
+
         [AllowAnonymous]
         [HttpPost]
         public JsonResult SendRequest(string customer_no)
@@ -97,7 +117,6 @@ namespace InventoryFeed.Controllers
             try
             {
                 var protocol_addr="";
-
 
                 if (Request["sendvia"] == "email") protocol_addr = Request["email"];
                 else if (Request["sendvia"] == "ftp") protocol_addr = Request["ftp"];
@@ -113,34 +132,18 @@ namespace InventoryFeed.Controllers
                                 sendtime = Request["time"].Replace(",",";"),
                                 fields = Request["field"].Replace(",",";"),
                                 sendday = "Mon,Tue,Wed,Thu,Fri"
-
-                                // send = Request["sendid"],
                           };
 
-                // Add the new object to the Orders collection.
                 db.tblInventoryFeeds.Add(req);
                 db.SaveChanges();
 
-                int id = req.if_id;  //the last id inserted
+                int if_id = req.if_id;  //the last id inserted
 
+                string sendtime = Request["time"].Replace(",", ";");
                 string[] separators = { ",", ";", " " };
-                string sendtime = req.sendtime;
-                string[] sendtime_array = sendtime.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-                
-                foreach (string individual_sendtime in sendtime_array)
-                {
-                    
-                    tblInventoryFeedProcess subreq = new tblInventoryFeedProcess
-                    {
-                         if_id = id,
-                         status="0",
-                         time_split = TimeSpan.Parse(individual_sendtime, System.Globalization.CultureInfo.CurrentCulture),
-                    };
-                    db.tblInventoryFeedProcesses.Add(subreq);
-                    db.SaveChanges();
-                } 
+                string[] sendtime_array = Library.Explode(sendtime, separators);
 
-
+                AddEditSameFunction(if_id, sendtime);
 
                 return Json(new { message = req});
             }
@@ -155,16 +158,13 @@ namespace InventoryFeed.Controllers
         public JsonResult FeedDelete(int if_id)
         {
             IFSReportingContext db_local = new IFSReportingContext();
-
-            tblInventoryFeed inv = new tblInventoryFeed() //selecting for update
-            {
+            tblInventoryFeed inv = new tblInventoryFeed(){ //selecting for update
                 if_id = if_id
             };
 
             db_local.tblInventoryFeeds.Attach(inv);  
             db_local.tblInventoryFeeds.Remove(inv);
             db_local.SaveChanges();
-
 
             Library.Execute("DELETE tblInventoryFeedProcess WHERE if_id = " + if_id);
    
@@ -175,7 +175,6 @@ namespace InventoryFeed.Controllers
         [HttpPost]
         public JsonResult FeedEdit(int if_id)
         {
- 
             IFSReportingContext db_local = new IFSReportingContext();
             tblInventoryFeed inv = new tblInventoryFeed() //selecting for update
             {
@@ -184,12 +183,10 @@ namespace InventoryFeed.Controllers
 
             db_local.tblInventoryFeeds.Attach(inv);
 
-
             var protocol_addr = "";
 
             if (Request["sendvia"] == "email") protocol_addr = Request["email"];
             else if (Request["sendvia"] == "ftp") protocol_addr = Request["ftp"];
-
 
             inv.customer_no = Request["customer_no"];
              inv.filetype_requested = Request["type"];
@@ -206,25 +203,12 @@ namespace InventoryFeed.Controllers
             db_local.SaveChanges();
 
             Library.Execute("DELETE tblInventoryFeedProcess WHERE if_id = " + if_id);
-
-
-            string[] separators = { ",", ";", " " };
+            
             string sendtime = Request["time"].Replace(",", ";");
-            string[] sendtime_array = sendtime.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            string[] separators = { ",", ";", " " };
+            string[] sendtime_array = Library.Explode(sendtime, separators);
 
-            foreach (string individual_sendtime in sendtime_array)
-            {
-
-                tblInventoryFeedProcess subreq = new tblInventoryFeedProcess
-                {
-                    if_id = if_id,
-                    status = "0",
-                    time_split = TimeSpan.Parse(individual_sendtime, System.Globalization.CultureInfo.CurrentCulture),
-                };
-                db.tblInventoryFeedProcesses.Add(subreq);
-                db.SaveChanges();
-            } 
-
+            AddEditSameFunction(if_id,sendtime);
 
             return Json(new { message = "edit" });
         }
