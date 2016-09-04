@@ -1,8 +1,12 @@
 ﻿using System.Web;
 using System.Web.Optimization;
+using System.Text.RegularExpressions;
+using System.IO;
+using InventoryFeed.App_Start;
 
 namespace InventoryFeed
 {
+    
     public class BundleConfig
     {
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
@@ -37,10 +41,11 @@ namespace InventoryFeed
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/datatables").Include(
+            bundles.Add(new StyleBundle("~/Content/datatables_css").Include(
                         "~/Content/datatables/jquery.dataTables.css",
                         "~/Content/datatables/shCore.css",
                         "~/Content/datatables/demo.css"
+                        
                         ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
@@ -56,6 +61,8 @@ namespace InventoryFeed
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+             
         }
     }
 }
