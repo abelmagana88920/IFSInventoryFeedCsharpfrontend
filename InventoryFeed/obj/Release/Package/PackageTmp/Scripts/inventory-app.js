@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
 
     window.adjustheight = function () {
+         
         var customerForm = $('#customerForm');
         var sendvia = customerForm.find('input[name="sendvia"]:checked').val();
         var addHeight = $("#timediv div").length + $("#filediv div").length - 2;
@@ -153,8 +154,11 @@
         var url = "";
         var feed_direct;
         if (controller == "Customer" && method == "Create") {
+           
             url = '/Customer/SendRequest/' + customerNumber;
             feed_direct = "Feed";
+
+            sessionStorage.rowKeyStore = "{\"0\":true}";
              
         }
         else if (controller == "Customer" && method == "Update") {
@@ -353,6 +357,7 @@
                ,
                function (data, status) {
                    if (status == "success") {
+                       sessionStorage.rowKeyStore = "{}";
                        window.location.href = 'Feed';
                    }
                });
@@ -364,13 +369,31 @@
         return false;
     }
 
+    window.lnkProcess = function (id) {
+
+        //clearing interval
+        var highestTimeoutId = setInterval(";");
+        for (var i = 0 ; i < highestTimeoutId ; i++) {
+            clearInterval(i);
+        }
+
+        var interval = setInterval(function () {
+            $('#page-content').load('/Customer/Process/' + id);
+        }, 1000);
+
+        return false;
+    }
+
     $("a#lnkCreate").on("click", function () {
         var dt = $('#example').DataTable();
         dt.table().state.clear();
+        sessionStorage.rowKeyStore = "{}";
 
         window.location.href = '/Customer/Create';
         return false;
     });
+
+    
 
 });
 
