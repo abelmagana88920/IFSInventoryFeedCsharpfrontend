@@ -30,7 +30,8 @@ namespace InventoryFeed
                         "~/Scripts/datatables/jquery.dataTables.js",
                         "~/Scripts/datatables/shCore.js",
                         "~/Scripts/datatables/demo.js",
-                        "~/Scripts/datatables/dataTables.fixedColumns.js"
+                        "~/Scripts/datatables/dataTables.fixedColumns.js",
+                        "~/Scripts/datatables/dataTables.select.js"
                         ));
 
 

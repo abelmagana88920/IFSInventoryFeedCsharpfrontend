@@ -37,8 +37,8 @@ namespace InventoryFeed.Controllers
 
         public ActionResult Feed()
         {
-            var feed = from m in db.tblInventoryFeeds
-                          select m;
+            var feed = (from m in db.tblInventoryFeeds
+                          select m).OrderByDescending(x => x.if_id);;
 
             return View(feed); 
         }
@@ -51,7 +51,6 @@ namespace InventoryFeed.Controllers
 
         public ActionResult Update(int id)
         {
-           
                 int if_id = id;
                 var edit_query = db.tblInventoryFeeds.Where(m => m.if_id == if_id).FirstOrDefault();
 
@@ -59,18 +58,31 @@ namespace InventoryFeed.Controllers
                                  where m.if_id == if_id
                                  select m; */
                 return View(edit_query);
-          
-           
         }
 
-        public ActionResult Process()
+    
+        public ActionResult Process(string id)
         {
-          
-            var process = from m in db.tblInventoryFeedProcesses
-                         select m;  
- 
-             return View(process); 
+            IQueryable process;
+
+            if (id == null)
+                process = from m in db.tblInventoryFeedProcesses
+                          select m;
+            else
+            {
+                int if_id;
+                bool check = int.TryParse(id, out if_id);
+  
+                process = from m in db.tblInventoryFeedProcesses
+                          where m.if_id == if_id
+                          select m;
+            }
+
+            return View(process);
         }
+         
+       
+       
 
         public ActionResult Datatables()
         {

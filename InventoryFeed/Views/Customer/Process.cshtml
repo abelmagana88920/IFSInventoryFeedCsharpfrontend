@@ -1,38 +1,62 @@
 ﻿@model IEnumerable<InventoryFeed.Models.DB.tblInventoryFeedProcess>
 
 @{
-    ViewBag.Title = "Process";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "";
 }
 
-<h2>Process</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ifp_id)
+<script type="text/javascript" language="javascript" class="init">
+	    $(function () {
+	        $('#example2').DataTable({
+	            "bFilter": false,
+                "paging": false
+	        });
+
+
+	    });
+</script>
+
+<table id="example2" class="stripe row-border order-column" cellspacing="0" width="100%">
+    <thead>
+    <tr align="center">
+        <th >
+            PROCESS ID
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.if_id)
+            IF ID
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.time_split)
+            TIME
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.datetime_updated)
+            DATE UPDATED
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.status)
+            STATUS
         </th>
-        <th></th>
+        
     </tr>
+     </thead>
+    <tbody>
+
+
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
+ 
+    
+    string status = Html.DisplayFor(model => item.status).ToString();
+    string stat_text = "", bcolor_status = "", color_status="";
+
+    if (status == "0") { stat_text = "Pending"; bcolor_status = "gray"; color_status = "white"; }
+    else if (status == "1") { stat_text = "Initializing"; bcolor_status = "yellow"; color_status = "white"; }
+    else if (status == "2") { stat_text = "Preparing file"; bcolor_status = "green"; color_status = "white"; }
+    else if (status == "3") { stat_text = "Sent"; bcolor_status = "blue"; color_status = "white"; }
+    else if (status == "999") { stat_text = "Failed"; bcolor_status = "red"; color_status = "white"; }
+                
+                
+     
+    <tr align="center" style="background-color: @bcolor_status; color: @color_status;">
+        <td style="color:black;">
             @Html.DisplayFor(modelItem => item.ifp_id)
         </td>
         <td>
@@ -45,19 +69,14 @@
             @Html.DisplayFor(modelItem => item.datetime_updated)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.status)
+           
+            @stat_text
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
+       
     </tr>
 }
+        </tbody>
 
 </table>
 
- @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/mainscript")@*  *@
+ 
