@@ -103,6 +103,8 @@ namespace InventoryFeed.Controllers
             return Json(db.tblInvoiceLinesMasters.Select(m => new { m.CUSTOMER_NO, m.CUSTOMER_NAME }).Where(m => m.CUSTOMER_NO== customer_no).Distinct(), JsonRequestBehavior.AllowGet);
         }
 
+      
+
 
         public void AddEditSameFunction(int if_id,string sendtime) {
             string[] separators = { ",", ";", " " };
@@ -224,6 +226,53 @@ namespace InventoryFeed.Controllers
 
             return Json(new { message = "edit" });
         }
+
+       
+        public JsonResult FtpTest()
+        {
+
+            string ftp_credentials = Request["ftp"];
+
+            string[] separators = { ",", ";", " " };
+           
+            string[] words = ftp_credentials.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            string ftphostname = "", ftpusername = "", ftppassword = "", ftpfolder = "";
+
+            if (words.Length <= 4) // ftp host, username, password
+            {
+                ftphostname = words[0];
+                ftpusername = words[1];
+                ftppassword = words[2];
+                if (words.Length == 4)
+                    ftpfolder = words[3];
+                else
+                    ftpfolder = "";
+            }
+
+            FtpWebRequest ftp = (FtpWebRequest)FtpWebRequest.Create("ftp://"+ftphostname+"/"+ftpfolder+"/test.txt");
+            FtpWebResponse res;
+            StreamReader reader;
+
+            ftp.Credentials = new NetworkCredential(ftpusername, ftppassword);
+            ftp.KeepAlive = false;
+            ftp.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+            ftp.UsePassive = true;
+
+            try
+            {
+                using (res = (FtpWebResponse)ftp.GetResponse())
+                {
+                    reader = new StreamReader(res.GetResponseStream());
+                }
+                 return Json(new { message = "FTP Verified", status="success" });
+            }
+            catch
+            {
+                return Json(new { message = "The system cannot connect to the specified ftp credentials", status = "failed" });
+         
+            }
+        }
+
 
 
     }

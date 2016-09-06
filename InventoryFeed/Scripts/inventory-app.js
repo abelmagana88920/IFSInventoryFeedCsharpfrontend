@@ -1,17 +1,31 @@
 ﻿$(document).ready(function () {
 
     window.adjustheight = function () {
-         
+
         var customerForm = $('#customerForm');
         var sendvia = customerForm.find('input[name="sendvia"]:checked').val();
         var addHeight = $("#timediv div").length + $("#filediv div").length - 2;
-       
+
         if (sendvia === 'ftp') {
             $('.testbox').css("height", 970 + addHeight * 40);
         } else {
             $('.testbox').css("height", 810 + addHeight * 40);
         }
-    }
+    };
+
+    window.cname_fill = function () {
+        var customerNumber = $("#cnumber").val();
+        if (customerNumber != '') {
+            $.getJSON('/Customer/Number/' + customerNumber, function (result) {
+                if (result.length > 0) {
+                    $('#cname').val(result[0].CUSTOMER_NAME);
+                } else {
+                    $('#cname').val('');
+                }
+            });
+        }
+        return false;
+    };
 
     var inventoryApp = {
         time: 0,
@@ -31,11 +45,60 @@
  
     });
 
+    function FtpTestFunction(ftp) {
+        deferred = $.Deferred();
+        that = this;
+
+        var ftpobject = {
+            ftp: ftp
+        };
+
+        $.post("/Customer/FtpTest",
+        $.param(ftpobject, true)
+        ,
+       function (data, status) {
+           console.log(data);
+           if (data.status == "failed") {
+               alert(data.message);
+               return false;
+           } else {
+               that.deferred.resolve();
+           }
+       });
+        return deferred.promise();
+    }
+
+    function ExecuteFeedRequest(yourJsonObject,customerNumber,if_id, controller, method) {
+        var url = "";
+        var feed_direct;
+        if (controller == "Customer" && method == "Create") {
+
+            url = '/Customer/SendRequest/' + customerNumber;
+            feed_direct = "Feed";
+
+            sessionStorage.rowKeyStore = "{\"0\":true}";
+
+        }
+        else if (controller == "Customer" && method == "Update") {
+            url = '/Customer/FeedEdit/' + if_id;
+            feed_direct = "../Feed";
+        }
+        $.post(url,
+            $.param(yourJsonObject, true)
+        ,
+       function (data, status) {
+
+           if (status == "success") {
+               window.location.href = feed_direct;
+
+           }
+       });
+    }
+
     $("#submit").on('click', function () {
 
-        
-       
         var customerNumber = $("#cnumber").val();
+        var customerName = $("#cname").val();
         var required = "";
         var focus = new Array();
         var index=0;
@@ -83,15 +146,15 @@
         var field = $("select[name='field[]']")
               .map(function () { return $(this).val(); }).get();
 
-        /*a = 0;
-        field.forEach(function (entry) {
-            if (entry == "") field_required = 1;
-            a++;
-        }); */
-
-
+        ///////////////////////////////validation
         if (customerNumber == "") {
             required += "\nCustomer Number is Required";
+            focus[index] = "cnumber";
+            index++;
+        }
+
+        if (customerName == "") {
+            required += "\nCustomer Number doesn't exist";
             focus[index] = "cnumber";
             index++;
         }
@@ -119,7 +182,7 @@
                 required += "\nFTP password is Required";
                 focus[index] = "ftppassword";
                 index++;
-            }
+            }    
         }
 
         if (time_required == 1) {
@@ -128,55 +191,37 @@
             index++;
         }
 
- 
-        console.log(focus);
+
         if (required != "") {
             alert(required);
             $("#" + focus[0]).focus();
             return false;
         }
 
-        var yourJsonObject = {
+        var ftp_set = ftphostname + ";" + ftpusername + ";" + ftppassword + ";" + ftpfolder;
+        
+        yourJsonObject = {
             customer_no: customerNumber,
             type: type,
             sendid: sendid,
             sendvia: sendvia,
             email: email,
-            ftp: ftphostname + ";" + ftpusername + ";" + ftppassword + ";" + ftpfolder,
+            ftp: ftp_set,
             buyer: buyer,
             header: header,
             time: time,
             field: field
         };
-        
-        console.log(yourJsonObject);
-        
-        var url = "";
-        var feed_direct;
-        if (controller == "Customer" && method == "Create") {
-           
-            url = '/Customer/SendRequest/' + customerNumber;
-            feed_direct = "Feed";
 
-            sessionStorage.rowKeyStore = "{\"0\":true}";
-             
+
+        if (sendvia == "ftp") {
+            var promise = FtpTestFunction(ftp_set);
+            promise.then(function (result) {
+                ExecuteFeedRequest(yourJsonObject,customerNumber,if_id, controller, method);
+            });
+        } else {
+                ExecuteFeedRequest(yourJsonObject, customerNumber, if_id, controller, method);
         }
-        else if (controller == "Customer" && method == "Update") {
-            url = '/Customer/FeedEdit/' + if_id;
-            feed_direct = "../Feed";
-        }
-        $.post(url,
-            $.param(yourJsonObject, true)
-        ,
-       function (data, status) {
-
-           if (status == "success") {
-               window.location.href = feed_direct;
-
-           }
-       });  
-
-     
 
         return false;
     });
