@@ -145,7 +145,34 @@
             <td>@Html.DisplayFor(modelItem => item.filetype_requested)</td>
             <td>@Html.DisplayFor(modelItem => item.send_protocol)</td>
             <td>@Html.DisplayFor(modelItem => item.protocol_address)</td>
-            <td>@Html.DisplayFor(modelItem => item.sendtime)</td>
+            <td>
+                @{
+                         List<string> l = new List<string>();
+                         string sendtime = item.sendtime;
+                         string[] separators = { ";"," " };
+                         string[] times = sendtime.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+                        
+
+                         DateTime timeFromInput;
+
+                         string timeIn12HourFormatForDisplay = "";
+                         
+                         
+                         foreach (var t in times)
+                         {
+                             timeFromInput = DateTime.ParseExact(t, "H:m:s", null, System.Globalization.DateTimeStyles.None);
+                             timeIn12HourFormatForDisplay = timeFromInput.ToString(
+                             "hh:mm tt",
+                             System.Globalization.CultureInfo.InvariantCulture);
+                             l.Add(timeIn12HourFormatForDisplay);
+                         }
+                         
+                         string[] cont_time = l.ToArray();
+                         string timeformat = string.Join(",",cont_time);     
+                }
+                @timeformat
+            </td>
             <td>@Html.DisplayFor(modelItem => item.sendbuyers_partno)</td>
             <td>@Html.DisplayFor(modelItem => item.sendaaid_instead_brand_id)</td>
             <td>@Html.DisplayFor(modelItem => item.fields)</td>

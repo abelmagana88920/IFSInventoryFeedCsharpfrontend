@@ -64,7 +64,14 @@
             @Html.DisplayFor(modelItem => item.if_id)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.time_split)
+            @{
+                     string t = Html.DisplayFor(modelItem => item.time_split).ToString();
+                    var timeFromInput = DateTime.ParseExact(t, "H:m:s", null, System.Globalization.DateTimeStyles.None);
+                    string timeIn12HourFormatForDisplay = timeFromInput.ToString(
+                    "hh:mm tt",
+                    System.Globalization.CultureInfo.InvariantCulture);
+            }
+            @timeIn12HourFormatForDisplay
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.datetime_updated)

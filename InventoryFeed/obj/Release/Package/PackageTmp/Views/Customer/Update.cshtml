@@ -188,6 +188,82 @@
                
             </div>
 
+              <br />
+             <div id="daydiv">
+
+                   @{
+                       
+                   
+                    string days = Html.DisplayFor(model => model.sendday).ToString(),first_day="0";
+                    string[] sep_day = { ";", " " };
+                 
+                    
+                    
+                    string[] day_array = days.Split(sep_day, StringSplitOptions.RemoveEmptyEntries);
+                  
+                    
+                    int index_day = 0;
+                    var selected = "";
+                    foreach (var day_inv in day_array) {
+                        
+                        
+                        if (index_day == 0) {
+                            
+                            <div class="day0">
+                                <label id="icon" for="name"><i class="fa fa-clock-o" aria-hidden="true"></i></label>
+                                <select id="day-0" name="day[]">
+                                    @{ if (day_inv == "Mon,Tue,Wed,Thu,Fri") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Mon,Tue,Wed,Thu,Fri" @selected>REGULAR DAYS</option>
+                                    @{ if (day_inv == "Sat,Sun") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Sat,Sun" @selected>WEEKEND</option>
+                                    @{ if (day_inv == "Mon") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Mon" @selected>Monday</option>
+                                    @{ if (day_inv == "Tue") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Tue" @selected>Tuesday</option>
+                                    @{ if (day_inv == "Wed") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Wed" @selected>Wednesday</option>
+                                    @{ if (day_inv == "Thu") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Thu" @selected>Thursday</option>
+                                    @{ if (day_inv == "Fri") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Fri" @selected>Friday</option>
+                                    @{ if (day_inv == "Sat") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Sat" @selected>Saturday</option>
+                                    @{ if (day_inv == "Sun") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Sun" @selected>Sunday</option>
+                                </select>
+                                <button class="add" data-add="day" for="name" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button> <br />
+                            </div>
+                        } else {
+                            first_day = "day";
+                            string id_day = "editday-" + index_day;
+                            <div class="day">
+                            <select class="newfield" id="@id_day" name=day[] >
+                                 @{ if (day_inv == "Mon,Tue,Wed,Thu,Fri") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Mon,Tue,Wed,Thu,Fri" @selected>REGULAR DAYS</option>
+                                    @{ if (day_inv == "Sat,Sun") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Sat,Sun" @selected>WEEKEND</option>
+                                    @{ if (day_inv == "Mon") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Mon" @selected>Monday</option>
+                                    @{ if (day_inv == "Tue") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Tue" @selected>Tuesday</option>
+                                    @{ if (day_inv == "Wed") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Wed" @selected>Wednesday</option>
+                                    @{ if (day_inv == "Thu") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Thu" @selected>Thursday</option>
+                                    @{ if (day_inv == "Fri") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Fri" @selected>Friday</option>
+                                    @{ if (day_inv == "Sat") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Sat" @selected>Saturday</option>
+                                    @{ if (day_inv == "Sun") { selected = "selected"; } else { selected = ""; } }
+                                    <option value="Sun" @selected>Sunday</option>
+                             </select><button type="button" class="minus"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                            </div>
+                        }
+                        index_day++;    
+                   }
+                 }
+            </div>
+
             <h4 class="formatlabel">Format File</h4><br />
             <div id="filediv">
 
@@ -196,7 +272,7 @@
 
                     string[] field_array = fields.Split(separators, StringSplitOptions.RemoveEmptyEntries);
                     int index_field = 0;
-                    var selected = "";
+                    selected = "";
                     foreach (var field in field_array) {
                         
                         

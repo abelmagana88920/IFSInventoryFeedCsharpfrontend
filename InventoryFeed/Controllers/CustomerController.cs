@@ -145,7 +145,7 @@ namespace InventoryFeed.Controllers
                                 includeheaders = Request["header"],
                                 sendtime = Request["time"].Replace(",",";"),
                                 fields = Request["field"].Replace(",",";"),
-                                sendday = "Mon,Tue,Wed,Thu,Fri"
+                                sendday = Request["day"]
                           };
 
                 db.tblInventoryFeeds.Add(req);
@@ -212,7 +212,7 @@ namespace InventoryFeed.Controllers
               inv.includeheaders = Request["header"];
              inv.sendtime = Request["time"].Replace(",", ";");
              inv.fields = Request["field"].Replace(",", ";");
-             inv.sendday = "Mon,Tue,Wed,Thu,Fri";
+             inv.sendday = Request["day"];
             
             db_local.SaveChanges();
 
