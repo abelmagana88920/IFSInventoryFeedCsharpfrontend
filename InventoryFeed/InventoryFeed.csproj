@@ -248,6 +248,7 @@
       <LastGenOutput>IFSReportingModel.cs</LastGenOutput>
     </Content>
     <None Include="Properties\PublishProfiles\InventoryFeed.pubxml" />
+    <None Include="Properties\PublishProfiles\InventoryFeed_wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\inventory-app.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
